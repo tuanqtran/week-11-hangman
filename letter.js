@@ -3,6 +3,7 @@ function Letter(value) {
 	this.visible = false;
 }
 
+// Reveals what the letter should be.
 Letter.prototype.show = function() {
 	// ternary operator below
 	return (this.visible) ? this.value : '_';

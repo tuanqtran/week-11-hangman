@@ -30,18 +30,34 @@ function userLetterGuess(currentWord) {
 				message: "Guess a letter."
 			}
 		]).then(function(guess){
-			console.log("\nYou guess the letter: " + guess.guessLetter);
-			
+			var userGuess = guess.guessLetter;
+			console.log("\nYou guess the letter: " + userGuess);
 			// Need to figure out how to call word/letter.js 
-			// if(){
+			// if(guessesRemaining > 0){
+				// console.log();
 				// right section
 			// }else{
+				// console.log();
 				// wrong section (Decrement guessesRemaining.)
 			// }
-			console.log("Random stuff " + currentWord);
-			var randomthing = new Word(currentWord);
+
+			// console.log("Current word " + currentWord);
+			// var randomthing = new Word(currentWord);
+			// console.log(randomthing);
+
+			var randomthing = new Word(currentWord).value;
 			console.log(randomthing);
+
+			// var thisthing = new Word.currentWord.guess;
+			// console.log(thisthing);
+
+			// var newthing = new Word(randomthing).guess;
+			// console.log(newthing);
+			
+			// var something = new Letter(newthing).show;
+			// console.log(something);
 			// console.log(Word.show(currentWord));
+
 
 			// var wordToGuess = this.currentWord.show();
 			// console.log(Word.show(currentWord));
@@ -101,6 +117,9 @@ function categoryQuestion(){
 };
 
 start();
-			// .catch(function(err){
-			// 	console.log(err);
-			// })
+
+
+
+// .catch(function(err){
+// 	console.log(err);
+// })
