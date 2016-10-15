@@ -1,9 +1,9 @@
 module.exports = function(){	
 	var chosenBank;
 	var wordBankFF = ["Black Mage", "White Mage"],
-		wordBankFF7 = ["Cloud", "Tifa", "Barret", "Aeris", "Cid", "Vincent"],
-		wordBankFF12 = ["Vaan", "Balthier", "Fran", "Basch", "Ashe", "Penelo", "Reks"],
-		wordBankFF13 = ["Lightning", "Snow", "Vanille", "Sazh", "Hope", "Fang"];
+		wordBankFF7 = ["CLOUD", "TIFA", "BARRET", "AERIS", "CID", "VINCENT"],
+		wordBankFF12 = ["VAAN", "BALTHIER", "FRAN", "BASCH", "ASHE", "PENELO", "REKS"],
+		wordBankFF13 = ["LIGHTNING", "SNOW", "VANILLE", "SAZH", "HOPE", "FANG"];
 
 	var randomWord = function(wordbank) {
 		return wordbank[Math.floor(Math.random() * wordbank.length)]

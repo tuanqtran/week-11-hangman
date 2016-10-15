@@ -3,13 +3,43 @@ var Letter = require('./letter.js')
 function Word(value) {
 	// The word we want our users to guess
 	this.value = value;
+	console.log("This is the value: " + value);
 	// An array of Letter objects that represent our word
 	this.letters = value
-		.split()
+		.split("")
 		.map(function(v) {
+			console.log(new Letter(v));
 			return new Letter(v);
 		});
+
+	// this.show = function() {
+	// return this.letters
+	// 	.map(function(v) {
+	// 		return v.show();
+	// 	})
+	// 	.join();
+	// }
+
+	// this.guess = function(guess){
+	// 	this.letters.map(function(l){
+	// 		if (guess === l.value) {
+	// 			l.visible = true;
+	// 			return true;
+	// 		}
+	// 		else{
+	// 			return false;
+	// 		}
+	// 	})
+	// 	.some(function(v){
+	// 		return v;
+	// 	});
+	// }
+
+	// this.finished = function() {
+	// 	return this.show() === this.value;
+	// }
 }
+
 // Use show to update the screen.
 // Takes Letters and calls .show on each one,
 // collects them into a new array,
@@ -19,16 +49,24 @@ Word.prototype.show = function() {
 		.map(function(v) {
 			return v.show();
 		})
-		.join();
+		.join("");
 }
 
 Word.prototype.guess = function(guess){
-	this.letters.map(function(l){
+	return this.letters.map(function(l){
 		if (guess === l.value) {
+			// console.log("This is l-visible before: " + l.visible);
+
 			l.visible = true;
+			// console.log("This is guess: " + guess);
+			// console.log("This is l-value: " + l.value);
+			// console.log("This is l-visible after: " + l.visible);
 			return true;
 		}
 		else{
+			// console.log("This is guess: " + guess);
+			// console.log("This is l-value: " + l.value);
+			// console.log("This is l-visible: " + l.visible);
 			return false;
 		}
 	})

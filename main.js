@@ -5,83 +5,13 @@ var inquirer = require("inquirer"),
 
 var wins = 0,
 	losses = 0,
-	guessesRemaining = 10;
+	guessesRemaining = 10,
+	word = null,
+	lettersGuess = "";
 
 function reset(){
 	guessesRemaining = 10;
 	categoryQuestion();
-}
-
-function userCategory(choosenCategory){
-	console.log("\nYou have chosen the category " + choosenCategory.ffChoices);
-	var gameObj = new Game();
-	var currentWord = gameObj.pickYourCategory(choosenCategory.ffChoices);
-	console.log("Current word is " + currentWord); //Remove Later
-
-	userLetterGuess(currentWord);
-}
-
-function userLetterGuess(currentWord) {
-	if (guessesRemaining > 0){
-		inquirer.prompt([
-			{
-				type: "input",
-				name: "guessLetter",
-				message: "Guess a letter."
-			}
-		]).then(function(guess){
-			var userGuess = guess.guessLetter;
-			console.log("\nYou guess the letter: " + userGuess);
-			// Need to figure out how to call word/letter.js 
-			// if(guessesRemaining > 0){
-				// console.log();
-				// right section
-			// }else{
-				// console.log();
-				// wrong section (Decrement guessesRemaining.)
-			// }
-
-			// console.log("Current word " + currentWord);
-			// var randomthing = new Word(currentWord);
-			// console.log(randomthing);
-
-			var randomthing = new Word(currentWord).value;
-			console.log(randomthing);
-
-			// var thisthing = new Word.currentWord.guess;
-			// console.log(thisthing);
-
-			// var newthing = new Word(randomthing).guess;
-			// console.log(newthing);
-			
-			// var something = new Letter(newthing).show;
-			// console.log(something);
-			// console.log(Word.show(currentWord));
-
-
-			// var wordToGuess = this.currentWord.show();
-			// console.log(Word.show(currentWord));
-			userLetterGuess(currentWord);
-		})		
-	}else{
-		tryAgainOrLeave();
-	}
-}
-
-function tryAgainOrLeave(){
-	inquirer.prompt([
-		{
-			type: "confirm",
-			name: "tryAgain",
-			message: "Would you like to try again?"
-		}
-	]).then(function(userChoice){
-		if (userChoice.tryAgain == true){
-			reset();
-		}else{
-			console.log("Bye!");
-		}
-	})
 }
 
 function start(){
@@ -116,6 +46,82 @@ function categoryQuestion(){
 	})
 };
 
+function userCategory(choosenCategory){
+	console.log("\nYou have chosen the category " + choosenCategory.ffChoices);
+	var gameObj = new Game();
+	var currentWord = gameObj.pickYourCategory(choosenCategory.ffChoices);
+	console.log("Current word is " + currentWord); //Remove Later
+	word = new Word(currentWord);
+	userLetterGuess(currentWord);
+}
+
+function userLetterGuess(currentWord) {
+	// if (guessesRemaining > 0){
+		inquirer.prompt([
+			{
+				type: "input",
+				name: "guessLetter",
+				message: "Guess a letter."
+			}
+		]).then(function(guess){
+			letterCheck(currentWord, guess);
+		})		
+	// }else{
+	// 	tryAgainOrLeave();
+	// }
+}
+
+function letterCheck(currentWord, guess){
+	var userGuess = guess.guessLetter.toUpperCase();
+
+	// if (userGuess.trim().toUpperCase().includes(lettersGuess) == true){
+	// 	console.log("Wth");
+	// }else{
+	// 	console.log("OMG");
+	// }
+
+	console.log("\nYou guess the letter: " + userGuess);
+
+	var guessWord = word.guess(userGuess);
+	console.log("This should be true or false: " + guessWord);
+	console.log(word.show());
+	if (word.finished() === true){
+		console.log("You Won!");
+		tryAgainOrLeave();
+	}else if (guessesRemaining == 1){
+		console.log("You lost!");
+		tryAgainOrLeave();
+	}else if (guessWord === true){
+		console.log("Good Guess!");
+	}else if (guessWord === false){
+		guessesRemaining--
+		console.log("Bad Guess!");
+		console.log("Guess remaining: " + guessesRemaining);
+	}
+
+	lettersGuess += userGuess;
+	console.log("Current guesses: " + lettersGuess);
+	// console.log(word.guess(userGuess));
+
+	userLetterGuess(currentWord);
+};
+
+function tryAgainOrLeave(){
+	inquirer.prompt([
+		{
+			type: "confirm",
+			name: "tryAgain",
+			message: "Would you like to try again?"
+		}
+	]).then(function(userChoice){
+		if (userChoice.tryAgain == true){
+			reset();
+		}else{
+			console.log("Bye!");
+		}
+	})
+}
+
 start();
 
 
@@ -123,3 +129,25 @@ start();
 // .catch(function(err){
 // 	console.log(err);
 // })
+
+
+
+
+
+
+// console.log("Current word " + currentWord);
+// var randomthing = new Word(currentWord);
+// console.log(randomthing);
+// var thisthing = new Word.currentWord.guess;
+// console.log(thisthing);
+
+// var newthing = new Word(randomthing).guess;
+// console.log(newthing);
+
+// var something = new Letter(newthing).show;
+// console.log(something);
+// console.log(Word.show(currentWord));
+
+
+// var wordToGuess = this.currentWord.show();
+// console.log(Word.show(currentWord));
