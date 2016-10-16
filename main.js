@@ -11,6 +11,7 @@ var wins = 0,
 
 function reset(){
 	guessesRemaining = 10;
+	lettersGuess = "";
 	categoryQuestion();
 }
 
@@ -39,7 +40,9 @@ function categoryQuestion(){
 			type: "list",
 			name: "ffChoices",
 			message: "What Final Fantasy series would you like to guess from?\n",
-			choices: ["Final Fantasy", "Final Fantasy 7", "Final Fantasy 12", "Final Fantasy 13", "Bamn"]
+			choices: ["Final Fantasy Type-0", "Final Fantasy", "Final Fantasy II", "Final Fantasy III", "Final Fantasy IV",
+			"Final Fantasy V", "Final Fantasy VI", "Final Fantasy VII", "Final Fantasy VIII", "Final Fantasy IX", "Final Fantasy X",
+			"Final Fantasy X-2", "Final Fantasy XIII"]
 		}
 	]).then(function(choosenCategory){
 		userCategory(choosenCategory);
@@ -56,7 +59,6 @@ function userCategory(choosenCategory){
 }
 
 function userLetterGuess(currentWord) {
-	// if (guessesRemaining > 0){
 		inquirer.prompt([
 			{
 				type: "input",
@@ -64,49 +66,56 @@ function userLetterGuess(currentWord) {
 				message: "Guess a letter."
 			}
 		]).then(function(guess){
+			process.stdout.write("\u001b[2J\u001b[0;0H");
+
 			letterCheck(currentWord, guess);
 		})		
-	// }else{
-	// 	tryAgainOrLeave();
-	// }
 }
 
 function letterCheck(currentWord, guess){
-	var userGuess = guess.guessLetter.toUpperCase();
+	var userGuess = guess.guessLetter.trim().toUpperCase();
 
-	// if (userGuess.trim().toUpperCase().includes(lettersGuess) == true){
-	// 	console.log("Wth");
-	// }else{
-	// 	console.log("OMG");
-	// }
+	if (lettersGuess.includes(userGuess) == true){
+		console.log("Letter was already used. Please try again.");
+		logProgress();
+	}else{
+		lettersGuess += userGuess;
+		var guessWord = word.guess(userGuess);
+		// console.log("This should be true or false: " + guessWord);
+		if (word.finished() === true){
+			console.log("You Won!");
+			wins++;
+			tryAgainOrLeave();
+		}else if (guessesRemaining == 1){
+			losses++;
+			console.log("You lost!");
+			tryAgainOrLeave();
+		}else if (guessWord === true){
+			console.log("Good Guess!");
+			logProgress();
+		}else if (guessWord === false){
+			guessesRemaining--
+			console.log("Bad Guess!");
+			logProgress();
+		}
 
-	console.log("\nYou guess the letter: " + userGuess);
-
-	var guessWord = word.guess(userGuess);
-	console.log("This should be true or false: " + guessWord);
-	console.log(word.show());
-	if (word.finished() === true){
-		console.log("You Won!");
-		tryAgainOrLeave();
-	}else if (guessesRemaining == 1){
-		console.log("You lost!");
-		tryAgainOrLeave();
-	}else if (guessWord === true){
-		console.log("Good Guess!");
-	}else if (guessWord === false){
-		guessesRemaining--
-		console.log("Bad Guess!");
-		console.log("Guess remaining: " + guessesRemaining);
 	}
-
-	lettersGuess += userGuess;
-	console.log("Current guesses: " + lettersGuess);
-	// console.log(word.guess(userGuess));
-
-	userLetterGuess(currentWord);
+	function logProgress(){
+		console.log(word.show());
+		console.log("\nYou guess the letter: " + userGuess);
+		console.log("Current guesses: " + lettersGuess);
+		console.log("Guess remaining: " + guessesRemaining);
+		userLetterGuess(currentWord);
+	}
 };
 
+function logWinsLosses(){
+	console.log("Wins: " + wins);
+	console.log("Losses: " + losses);
+}
+
 function tryAgainOrLeave(){
+	logWinsLosses();
 	inquirer.prompt([
 		{
 			type: "confirm",
@@ -116,6 +125,7 @@ function tryAgainOrLeave(){
 	]).then(function(userChoice){
 		if (userChoice.tryAgain == true){
 			reset();
+			// start();
 		}else{
 			console.log("Bye!");
 		}
